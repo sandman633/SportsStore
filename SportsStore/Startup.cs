@@ -31,6 +31,7 @@ namespace SportsStore
                 opt.UseSqlServer(Configuration["ConnectionStrings:SportsStoreConnection"]);
             });
             services.AddScoped<IStoreRepository, EFRepository>();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,18 +47,20 @@ namespace SportsStore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("catpage",
-                    "{category}/Page{productPage:int}",
-                    new { Controller = "Home", action = "Index" });
-                endpoints.MapControllerRoute("page",
-                    "Page{productPage}",
+                  "{category}/Page{productPage:int}",
+                  new { Controller = "Home", action = "Index" });
+
+                endpoints.MapControllerRoute("page", "Page{productPage:int}",
                     new { Controller = "Home", action = "Index", productPage = 1 });
-                endpoints.MapControllerRoute("category",
-                    "{category}",
+
+                endpoints.MapControllerRoute("category", "{category}",
                     new { Controller = "Home", action = "Index", productPage = 1 });
+
                 endpoints.MapControllerRoute("pagination",
                     "Products/Page{productPage}",
                     new { Controller = "Home", action = "Index", productPage = 1 });
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
 
             SeedData.EnsurePopulated(app);
